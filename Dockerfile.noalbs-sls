@@ -1,0 +1,19 @@
+# build stage
+FROM node:alpine3.14 as build
+RUN apk update &&\
+    apk upgrade &&\ 
+    apk add --no-cache git
+WORKDIR /tmp/build
+RUN git clone https://github.com/715209/nginx-obs-automatic-low-bitrate-switching.git noalbs
+WORKDIR /tmp/build/noalbs
+RUN npm install --production
+
+# final stage
+FROM node:alpine3.14
+COPY --from=build /tmp/build/noalbs/lib /noalbs/lib
+COPY --from=build /tmp/build/noalbs/locales /noalbs/locales
+COPY --from=build /tmp/build/noalbs/node_modules /noalbs/node_modules
+COPY --from=build /tmp/build/noalbs/config.json /noalbs/config.json
+COPY --from=build /tmp/build/noalbs/package.json /noalbs/package.json
+WORKDIR /noalbs
+CMD npm start

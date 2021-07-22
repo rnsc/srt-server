@@ -1,0 +1,17 @@
+# build stage
+FROM alpine:3.14 as buildbelabox
+RUN apk add --no-cache --update git cmake tcl openssl openssl-dev build-base linux-headers
+WORKDIR /tmp
+RUN git clone https://github.com/BELABOX/srtla.git && cd srtla && make
+WORKDIR /tmp
+RUN git clone https://github.com/BELABOX/srt.git && cd srt && ./configure && make
+RUN touch /tmp/srtla/srtla_rec
+RUN touch /tmp/srt/srt-live-transmit
+
+# final stage
+FROM alpine:3.14
+RUN apk add --no-cache --update tcl openssl
+COPY --from=buildbelabox /tmp/srtla/srtla_send  /tmp/srtla/srtla_send 
+EXPOSE 6000/udp
+WORKDIR /tmp
+CMD /tmp/srtla/srtla_send 6000 ${EXTERNAL_IP} 5000 /tmp/srtla_ips

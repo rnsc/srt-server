@@ -1,0 +1,9 @@
+FROM golang:alpine3.13 as builder
+WORKDIR /go/src/app
+RUN apk add --no-cache git \
+&& git clone https://github.com/muxfd/multipath-udp.git . \
+&& go build -o /sender cmd/sender/main.go && rm -rf /go/src/app
+FROM alpine:3.14
+COPY --from=builder /sender /sender
+EXPOSE 1985/udp
+ENTRYPOINT ["/sender"]

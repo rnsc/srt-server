@@ -1,0 +1,23 @@
+FROM golang:alpine3.14 as builder
+WORKDIR /go/src/app
+RUN apk add --no-cache --update git cmake tcl openssl openssl-dev build-base linux-headers \
+&& git clone https://github.com/muxfd/multipath-udp.git . \
+&& go build -o /sender cmd/sender/main.go && rm -rf /go/src/app
+WORKDIR /tmp
+RUN git clone https://github.com/voc/srtrelay.git \
+&& git clone https://github.com/BELABOX/srt.git \
+&& git clone https://github.com/muxfd/muxbox.git
+WORKDIR /tmp/srt
+RUN ./configure && make -j $(getconf _NPROCESSORS_ONLN) && make install
+WORKDIR /tmp/srtrelay
+RUN go build
+
+FROM alpine:3.14
+RUN apk add --update libsrt
+ENV LD_LIBRARY_PATH /lib:/usr/lib:/usr/local/lib
+COPY --from=builder /tmp/muxbox/srt-relay/config.toml /etc/srtrelay/config.toml
+#COPY --from=builder /usr/local/srt /usr/local/srt
+COPY --from=builder /tmp/srtrelay/srtrelay /srtrelay
+#COPY --from=builder /tmp/srt /srt
+EXPOSE 1935/udp
+ENTRYPOINT [ "/srtrelay" ]

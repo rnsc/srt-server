@@ -1,0 +1,162 @@
+FROM alpine:3.14 as build-nginx
+ARG NGINX_VERSION=1.21.1
+ARG NGINX_RTMP_VERSION=1.2.2
+
+RUN apk add --update \
+  build-base \
+  ca-certificates \
+  curl \
+  gcc \
+  libc-dev \
+  libgcc \
+  linux-headers \
+  make \
+  musl-dev \
+  openssl \
+  openssl-dev \
+  pcre \
+  pcre-dev \
+  pkgconf \
+  pkgconfig \
+  zlib-dev
+
+RUN cd /tmp && \
+  wget https://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz && \
+  tar zxf nginx-${NGINX_VERSION}.tar.gz && \
+  rm nginx-${NGINX_VERSION}.tar.gz
+
+RUN cd /tmp && \
+  wget https://github.com/arut/nginx-rtmp-module/archive/v${NGINX_RTMP_VERSION}.tar.gz && \
+  tar zxf v${NGINX_RTMP_VERSION}.tar.gz && rm v${NGINX_RTMP_VERSION}.tar.gz
+
+RUN cd /tmp/nginx-${NGINX_VERSION} && \
+  ./configure \
+  --prefix=/usr/local/nginx \
+  --add-module=/tmp/nginx-rtmp-module-${NGINX_RTMP_VERSION} \
+  --conf-path=/etc/nginx/nginx.conf \
+  --with-threads \
+  --with-file-aio \
+  --with-http_ssl_module \
+  --with-debug \
+  --with-cc-opt="-Wimplicit-fallthrough=0" && \
+  cd /tmp/nginx-${NGINX_VERSION} && make && make install
+
+FROM alpine:3.14 as build-ffmpeg
+ARG FFMPEG_VERSION=4.4
+ARG PREFIX=/usr/local
+ARG MAKEFLAGS="-j4"
+
+RUN apk add --update \
+  build-base \
+  git \
+  coreutils \
+  freetype-dev \
+  lame-dev \
+  libogg-dev \
+  libass \
+  libass-dev \
+  libvpx-dev \
+  libvorbis-dev \
+  libwebp-dev \
+  libtheora-dev \
+  openssl-dev \
+  opus-dev \
+  libsrt-dev \
+  pkgconf \
+  pkgconfig \
+  rtmpdump-dev \
+  wget \
+  x264-dev \
+  x265-dev \
+  yasm
+
+RUN echo http://dl-cdn.alpinelinux.org/alpine/edge/community >> /etc/apk/repositories
+RUN apk add --update fdk-aac-dev
+
+RUN cd /tmp/ && \
+  wget http://ffmpeg.org/releases/ffmpeg-${FFMPEG_VERSION}.tar.gz && \
+  tar zxf ffmpeg-${FFMPEG_VERSION}.tar.gz && rm ffmpeg-${FFMPEG_VERSION}.tar.gz
+
+RUN cd /tmp/ffmpeg-${FFMPEG_VERSION} && \
+  ./configure \
+  --prefix=${PREFIX} \
+  --enable-version3 \
+  --enable-gpl \
+  --enable-nonfree \
+  --enable-small \
+  --enable-libmp3lame \
+  --enable-libx264 \
+  --enable-libx265 \
+  --enable-libvpx \
+  --enable-libtheora \
+  --enable-libvorbis \
+  --enable-libopus \
+  --enable-libfdk-aac \
+  --enable-libass \
+  --enable-libwebp \
+  --enable-postproc \
+  --enable-avresample \
+  --enable-libfreetype \
+  --enable-openssl \
+  --enable-libsrt \
+  --disable-debug \
+  --disable-doc \
+  --disable-ffplay \
+  --extra-libs="-lpthread -lm" && \
+  make && make install && make distclean \
+&& git clone https://github.com/alfg/docker-nginx-rtmp /docker-nginx-rtmp \
+&& git clone https://github.com/muxfd/muxbox /muxbox
+
+# Cleanup.
+RUN rm -rf /var/cache/* /tmp/*
+
+FROM alpine:3.14
+LABEL MAINTAINER moo https://www.twitch.tv/m_o_o_
+
+ENV HTTP_PORT 80
+ENV HTTPS_PORT 443
+ENV RTMP_PORT 1935
+
+RUN apk add --update \
+  ca-certificates \
+  gettext \
+  openssl \
+  pcre \
+  lame \
+  libogg \
+  curl \
+  libass \
+  libvpx \
+  libvorbis \
+  libwebp \
+  libtheora \
+  youtube-dl \
+  opus \
+  rtmpdump \
+  libsrt-dev \
+  x264-dev \
+  x265-dev
+
+COPY --from=build-nginx /usr/local/nginx /usr/local/nginx
+COPY --from=build-nginx /etc/nginx /etc/nginx
+COPY --from=build-ffmpeg /usr/local /usr/local
+COPY --from=build-ffmpeg /usr/lib/libfdk-aac.so.2 /usr/lib/libfdk-aac.so.2
+COPY --from=build-ffmpeg /docker-nginx-rtmp/static /www/static
+COPY --from=build-ffmpeg /docker-nginx-rtmp/nginx.conf /etc/nginx/nginx.conf.template
+COPY --from=build-ffmpeg /muxbox /muxbox
+
+ENV PATH "${PATH}:/usr/local/nginx/sbin"
+RUN mkdir -p /opt/data /var/log/nginx/ && touch /var/log/rtmp.info.log && cp /muxbox/nginx-rtmp-srt-transmuxer/nginx.conf /etc/nginx/nginx.conf && cp /muxbox/nginx-rtmp-srt-transmuxer/ffmpeg.sh /ffmpeg.sh.template && cp /muxbox/nginx-rtmp-srt-transmuxer/docker-entrypoint.sh /docker-entrypoint.sh && rm -rf /muxbox
+
+EXPOSE 1935
+EXPOSE 80
+
+#originally from https://github.com/alfg/docker-nginx-rtmp
+#but using https://github.com/muxfd/muxbox
+# Forward logs to Docker
+RUN ln -sf /dev/stdout /var/log/nginx/access.log && \
+    ln -sf /dev/stderr /var/log/nginx/error.log && \
+    ln -sf /dev/stdout /var/log/rtmp.info.log
+
+ENTRYPOINT ["/docker-entrypoint.sh"]
+CMD ["nginx", "-g", "daemon off;"]

@@ -1,0 +1,25 @@
+# build stage
+FROM alpine:3.14 as buildbelabox
+RUN apk add --no-cache --update git cmake tcl openssl openssl-dev build-base linux-headers
+WORKDIR /tmp
+RUN git clone https://github.com/BELABOX/srtla.git && cd srtla && make
+WORKDIR /tmp
+RUN git clone https://github.com/BELABOX/srt.git && cd srt && ./configure && make
+RUN touch /tmp/srtla/srtla_rec
+RUN touch /tmp/srt/srt-live-transmit
+
+# final stage
+FROM alpine:3.14
+RUN apk update &&\
+    apk upgrade &&\
+    apk add --no-cache openssl libstdc++
+COPY --from=buildbelabox /tmp/srtla/srtla_rec /tmp/srtla/srtla_rec
+COPY --from=buildbelabox /tmp/srt/srt-live-transmit /tmp/srt/srt-live-transmit
+EXPOSE 5000/udp 5001/udp
+ENV SRT_ENDPOINT_ADDR=127.0.0.1
+ENV SRT_ENDPOINT_PORT=5002
+WORKDIR /tmp
+COPY entrypoint-belabox-srtla-receiver.sh entrypoint.sh
+RUN chmod +x entrypoint.sh
+#CMD /tmp/srtla/srtla_rec 5000 127.0.0.1 5002 & /tmp/srt/srt-live-transmit -st:yes "srt://127.0.0.1:5002?mode=listener&lossmaxttl=40&latency=2000" "srt://0.0.0.0:5001?mode=listener"
+ENTRYPOINT [ "sh","-c","/tmp/entrypoint.sh" ]

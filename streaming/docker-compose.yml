@@ -1,0 +1,38 @@
+version: '3.8'
+services:
+  noalbs-sls:
+    image: moothecow/noalbs-sls:1.0
+    container_name: noalbs-sls
+    restart: unless-stopped
+    stdin_open: true
+    tty: true
+    command: npm start
+    volumes:
+      - ./config.json:/noalbs/config.json
+    depends_on:
+      - "noalbs-srtla"
+  noalbs-srtla:
+    image: moothecow/noalbs-srtla:1.0
+    container_name: noalbs-srtla
+    restart: unless-stopped
+    stdin_open: true
+    tty: true
+    ports: 
+      - "30000:30000/udp"
+      - "8282:8181/tcp"
+    volumes:
+      - ./sls.conf:/etc/sls/sls.conf
+  srtla-receiver:
+    image: moothecow/jetson-nano-belabox-srtla-receiver:1.0
+    container_name: srtla-receiver
+    restart: unless-stopped
+    ports:
+      - "5000:5000/udp"
+      - "5001:5001/udp"
+    volumes:
+      - ./entrypoint.sh:/tmp/entrypoint.sh
+    environment:
+      - SRT_ENDPOINT_ADDR=noalbs-srtla
+      - SRT_ENDPOINT_PORT=30000
+    depends_on:
+      - "noalbs-srtla"

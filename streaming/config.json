@@ -1,0 +1,61 @@
+{
+    "obs": {
+        "ip": "xxx.xxx.xxx.xxx.xxx:4444",
+        "password": "xxxxxxxxxx",
+        "normalScene": "LIVE",
+        "offlineScene": "BRB",
+        "lowBitrateScene": "LOW",
+        "refreshScene": "REFRESH",
+        "lowBitrateTrigger": 500,
+        "highRttTrigger": 2000,
+        "refreshSceneInterval": 5000,
+        "requestMs": 2000,
+        "onlySwitchWhenStreaming": false
+    },
+    "rtmp": {
+        "server": "srt-live-server",
+        "stats": "http://xxx.xxx.xxx.xxx:8282/stats",
+        "publisher": "publish/live/feed1"
+    },
+    "twitchChat": {
+        "channel": "m_o_o_",
+        "botUsername": "m_o_o_bot",
+        "oauth": "oauth:xxxxxxxxxxxxxxx",
+        "enable": false,
+        "prefix": "!",
+        "enablePublicCommands": true,
+        "publicCommands": [
+            "bitrate"
+        ],
+        "enableModCommands": false,
+        "modCommands": [
+            "refresh",
+            "fix",
+            "trigger",
+            "sourceinfo",
+            "obsinfo"
+        ],
+        "enableAutoSwitchNotification": true,
+        "enableAutoStopStreamOnHostOrRaid": true,
+        "adminUsers": [
+            "kaarujp",
+            "kaarubot",
+            "M_o_o_"
+        ],
+        "alias": [
+            [
+                "r",
+                "refresh"
+            ],
+            [
+                "f",
+                "fix"
+            ],
+            [
+                "b",
+                "bitrate"
+            ]
+        ]
+    },
+    "language": "en"
+}

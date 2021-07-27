@@ -1,0 +1,76 @@
+version: '3.5'
+services:
+  #multipath-udp-receiver:
+    #platform: linux/arm64/v8
+  #  build:
+  #    context: .
+  #    dockerfile: ./Dockerfile.multipath-udp-receiver
+  #  image: ${REPOSITORY_NAME}/${PROJECT_NAME}-multipath-udp-receiver:${GLOBAL_VERSION}
+  #  container_name: ${PROJECT_NAME}-multipath-udp-receiver
+  #  restart: unless-stopped
+  #  stdin_open: true
+  #  tty: true
+  #  ports:
+  #      - "1985:1985/udp"
+  multipath-udp-sender:
+    build:
+        context: .
+        dockerfile: ./Dockerfile.multipath-udp-sender
+    image: ${REPOSITORY_NAME}/${PROJECT_NAME}-multipath-udp-sender:${GLOBAL_VERSION}
+    container_name: ${PROJECT_NAME}-multipath-udp-sender
+    restart: unless-stopped
+    stdin_open: true
+    tty: true
+    ports:
+        - "1935:1935/udp"
+  nginx-rtmp-srt-transmuxer:
+    build:
+        context: .
+        dockerfile: ./Dockerfile.nginx-rtmp-srt-transmuxer
+    image: ${REPOSITORY_NAME}/${PROJECT_NAME}-nginx-rtmp-srt-transmuxer:${GLOBAL_VERSION}
+    container_name: ${PROJECT_NAME}-nginx-rtmp-srt-transmuxer
+    restart: unless-stopped
+    stdin_open: true
+    tty: true
+    ports:
+        - "1935:1935/tcp"
+        - "8484:80/tcp"
+#  srt-relay:
+#    build:
+#        context: .
+#        dockerfile: ./Dockerfile.srt-relay
+#    image: ${REPOSITORY_NAME}/${PROJECT_NAME}-srt-relay:${GLOBAL_VERSION}
+#    container_name: ${PROJECT_NAME}-srt-relay
+#    restart: unless-stopped
+#    stdin_open: true
+#    tty: true
+#    ports:
+#        - "1935:1935/udp"
+  belabox:
+    build:
+        context: .
+        dockerfile: ./Dockerfile.belabox
+    image: ${REPOSITORY_NAME}/${PROJECT_NAME}-belabox:${GLOBAL_VERSION}
+    container_name: ${PROJECT_NAME}-belabox
+    restart: unless-stopped
+    ports:
+      - "8080:80/tcp"
+#  belabox-srtla-sender:
+#    build:
+#        context: .
+#        dockerfile: ./Dockerfile.belabox-srtla-sender
+#    image: ${REPOSITORY_NAME}/${PROJECT_NAME}-belabox-srtla-sender:${GLOBAL_VERSION}
+#    container_name: ${PROJECT_NAME}-belabox-srtla-sender
+#    restart: unless-stopped
+#    stdin_open: true
+#    tty: true
+#    ports:
+#      - "6000:6000/udp"
+    #environment:
+    #  - EXTERNAL_IP=
+    #command: /tmp/srtla/srtla_send 6000 ${EXTERNAL_IP} 5000 /tmp/srtla_ips
+#    volumes:
+#      - belabox_data_volume:/belabox/srtla_ips
+#volumes:
+#  belabox_data_volume:
+#    external: true

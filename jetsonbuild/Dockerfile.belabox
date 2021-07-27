@@ -1,0 +1,39 @@
+# build stage
+FROM alpine:3.14 as buildbelabox
+RUN apk add --no-cache --update git cmake tcl openssl openssl-dev build-base linux-headers gstreamer-dev gst-plugins-base-dev libsrt-dev libc-dev musl-dev libgcc
+WORKDIR /tmp
+RUN git clone https://github.com/BELABOX/srt.git && cd srt && ./configure --prefix=/tmp/srt && make && make install
+WORKDIR /tmp
+RUN git clone https://github.com/BELABOX/srtla.git && cd srtla && make
+WORKDIR /tmp
+RUN git clone https://github.com/BELABOX/belaUI.git
+
+FROM ubuntu:latest as ubuntubuild
+ENV DEBIAN_FRONTEND=noninteractive
+RUN echo 'tzdata tzdata/Areas select Europe' | debconf-set-selections \
+&& echo 'tzdata tzdata/Zones/Europe select Vienna' | debconf-set-selections
+RUN apt-get update && apt-get install -y --no-install-recommends tclsh pkg-config cmake build-essential git libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev libsrt-dev libssl-dev
+WORKDIR /tmp
+RUN git config --global http.sslVerify false \
+&& git clone https://github.com/BELABOX/srt.git \
+&& cd srt \
+&& ./configure --prefix=/usr/local \
+&& make \
+&& make install \
+&& ldconfig
+WORKDIR /tmp/
+RUN git clone https://github.com/BELABOX/belacoder.git && cd belacoder && make && ls /tmp/belacoder/belacoder
+
+# final stage
+FROM alpine:3.14
+RUN apk add --no-cache --update tcl openssl gstreamer gst-plugins-base ruby usb-modeswitch
+RUN gem install sinatra sinatra-contrib
+COPY --from=buildbelabox /tmp/srtla/srtla_send  /belabox/srtla/srtla_send
+COPY --from=ubuntubuild /tmp/belacoder/belacoder  /belabox/belacoder/belacoder
+COPY --from=ubuntubuild /tmp/belacoder/pipeline  /belabox/belacoder/pipeline
+COPY --from=buildbelabox /tmp/belaUI  /belabox/belaUI
+COPY --from=buildbelabox /tmp/srt/*  /usr/local/
+RUN ldconfig /etc/ld.so.conf.d
+EXPOSE 80/tcp
+WORKDIR /belabox/
+ENTRYPOINT ["ruby", "belaUI.rb", "-o", "0.0.0.0", "-p", "80"]

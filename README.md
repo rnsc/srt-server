@@ -5,6 +5,5 @@ the streaming folder contains the docker compose for running the containers that
 
 TODO:
 
-- Creating a new folder for jetson builds
 
 - Documentation

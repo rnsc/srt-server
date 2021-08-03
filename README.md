@@ -7,3 +7,4 @@ TODO:
 
 
 - Documentation
+until I do you can just use the "streaming" folder to setup your srtla hosting system

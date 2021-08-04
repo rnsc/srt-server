@@ -1,6 +1,3 @@
-# docker files for streaming on a jetson nano and srt setup to send stream data to
-the build folder contains the docker compose for building all the containers
-
 the streaming folder contains the docker compose for running the containers that are needed on the endpoint side (e.g. at home or cloud)
 
 ## Pre-Requirements (windows)
@@ -24,3 +21,10 @@ docker-compose up -d
 + you can still access the normal srt server without bonding feature using udp port 30000 as a fallback (you'd need to add that to portforwarding though)
 + you can access the stats page via the ip of your windows machine using port 8282 in your browser if you need to fetch the statistics (bitrate/tts) that can be used in OBS
 + the linux setup is quite similar, just skip the windows related parts
+
+## Note
+the other folders contain the docker build files for streaming on a jetson nano and srt setup to send stream data to
+
+the build folder contains the docker compose for building all the containers
+
+everything is opensource, there are no secrets about the setup

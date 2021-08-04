@@ -34,7 +34,7 @@ COPY --from=buildbelabox /tmp/srt/*  /usr/local/
 RUN ldconfig /etc/ld.so.conf.d
 EXPOSE 80/tcp
 WORKDIR /belabox/belaUI/
-RUN apk add --no-cache --update tcl openssl gstreamer gst-plugins-base ruby ruby-json ruby-webrick usb-modeswitch
+RUN apk add --no-cache --update procps tcl openssl gstreamer gst-plugins-base ruby ruby-json ruby-webrick usb-modeswitch
 RUN gem update --system && gem install sinatra sinatra-contrib
 ADD https://raw.githubusercontent.com/moo-the-cow/jetson/main/setup.json /belabox/belaUI/setup.json
 ENTRYPOINT ["ruby", "belaUI.rb", "-o", "0.0.0.0", "-p", "80"]

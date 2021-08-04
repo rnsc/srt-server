@@ -1,4 +1,4 @@
-# Noalbs Hosting Setup for Belabox on the Jetson/Raspi
+# Noalbs Hosting Setup for Belabox on the Jetson
 the streaming folder contains the docker compose for running the containers that are needed on the endpoint side (e.g. at home or cloud)
 
 ## Pre-Requirements (windows)

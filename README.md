@@ -22,6 +22,7 @@ docker-compose up -d
 + you can still access the normal srt server without bonding feature using udp port 30000 as a fallback (you'd need to add that to portforwarding though)
 + you can access the stats page via the ip of your windows machine using port 8282 in your browser if you need to fetch the statistics (bitrate/tts) that can be used in OBS
 + the linux setup is quite similar, just skip the windows related parts
++ this setup is highly flexible - if you don't wanna use noalbs just configure the `docker-compose.yml` file and replace it with some other SRT solution. you can just re-configure ports and the container name via environment variables that are used in the `entrypoint.sh` file
 
 ## Note
 the other folders contain the docker build files for streaming on a jetson nano and srt setup to send stream data to

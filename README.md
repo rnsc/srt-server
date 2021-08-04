@@ -23,3 +23,4 @@ docker-compose up -d
 ## Troubleshooting
 + you can still access the normal srt server without bonding feature using udp port 30000 as a fallback (you'd need to add that to portforwarding though)
 + you can access the stats page via the ip of your windows machine using port 8282 in your browser if you need to fetch the statistics (bitrate/tts) that can be used in OBS
++ the linux setup is quite similar, just skip the windows related parts

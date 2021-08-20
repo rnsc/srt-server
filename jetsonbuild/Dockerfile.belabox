@@ -6,7 +6,7 @@ RUN git clone https://github.com/BELABOX/srt.git && cd srt && ./configure --pref
 WORKDIR /tmp
 RUN git clone https://github.com/BELABOX/srtla.git && cd srtla && make
 WORKDIR /tmp
-RUN git clone https://github.com/BELABOX/belaUI.git
+RUN git clone https://github.com/moo-the-cow/belaUI.git
 
 FROM ubuntu:latest as ubuntubuild
 ENV DEBIAN_FRONTEND=noninteractive
@@ -26,8 +26,6 @@ RUN git clone https://github.com/BELABOX/belacoder.git && cd belacoder && make &
 
 # final stage
 FROM alpine:3.14
-RUN apk add --no-cache --update tcl openssl gstreamer gst-plugins-base ruby usb-modeswitch
-RUN gem install sinatra sinatra-contrib
 COPY --from=buildbelabox /tmp/srtla/srtla_send  /belabox/srtla/srtla_send
 COPY --from=ubuntubuild /tmp/belacoder/belacoder  /belabox/belacoder/belacoder
 COPY --from=ubuntubuild /tmp/belacoder/pipeline  /belabox/belacoder/pipeline
@@ -35,5 +33,8 @@ COPY --from=buildbelabox /tmp/belaUI  /belabox/belaUI
 COPY --from=buildbelabox /tmp/srt/*  /usr/local/
 RUN ldconfig /etc/ld.so.conf.d
 EXPOSE 80/tcp
-WORKDIR /belabox/
+WORKDIR /belabox/belaUI/
+RUN apk add --no-cache --update procps tcl openssl gstreamer gst-plugins-base ruby ruby-json ruby-webrick usb-modeswitch
+RUN gem update --system && gem install sinatra sinatra-contrib
+ADD https://raw.githubusercontent.com/moo-the-cow/jetson/main/setup.json /belabox/belaUI/setup.json
 ENTRYPOINT ["ruby", "belaUI.rb", "-o", "0.0.0.0", "-p", "80"]

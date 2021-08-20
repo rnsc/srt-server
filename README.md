@@ -3,9 +3,10 @@ the streaming folder contains the docker compose for running the containers that
 
 ## Updating
 just modify the `.env` file and increase the version number (see changelog)
+
 and rerun `docker compose up -d`
 
-##Changelog:
+## Changelog:
 1.1: applied critical patch from b3cks repo
 1.0: first docker release
 

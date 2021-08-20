@@ -10,6 +10,7 @@ docker compose up -d
 
 ## Changelog:
 1.1: applied critical patch from b3cks repo
+
 1.0: first docker release
 
 ## Pre-Requirements (windows)

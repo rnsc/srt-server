@@ -1,17 +1,17 @@
 version: '3.8'
 services:
-  multipath-udp-receiver:
-    platform: linux/amd64
-    build:
-      context: .
-      dockerfile: ./Dockerfile.multipath-udp-receiver
-    image: ${REPOSITORY_NAME}/${PROJECT_NAME}-multipath-udp-receiver:${GLOBAL_VERSION}
-    container_name: ${PROJECT_NAME}-multipath-udp-receiver
-    restart: unless-stopped
-    stdin_open: true
-    tty: true
-    ports:
-        - "1985:1985/udp"
+  #multipath-udp-receiver:
+  #  platform: linux/amd64
+  #  build:
+  #    context: .
+  #    dockerfile: ./Dockerfile.multipath-udp-receiver
+  #  image: ${REPOSITORY_NAME}/${PROJECT_NAME}-multipath-udp-receiver:${GLOBAL_VERSION}
+  #  container_name: ${PROJECT_NAME}-multipath-udp-receiver
+  #  restart: unless-stopped
+  #  stdin_open: true
+  #  tty: true
+  #  ports:
+  #      - "1985:1985/udp"
   #multipath-udp-sender:
   #platform: linux/amd64
   #  build:
@@ -24,44 +24,44 @@ services:
   #  tty: true
   #  ports:
   #      - "1935:1935/udp"
-  nginx-rtmp-srt-transmuxer:
-    platform: linux/amd64
-    build:
-        context: .
-        dockerfile: ./Dockerfile.nginx-rtmp-srt-transmuxer
-    image: ${REPOSITORY_NAME}/${PROJECT_NAME}-nginx-rtmp-srt-transmuxer:${GLOBAL_VERSION}
-    container_name: ${PROJECT_NAME}-nginx-rtmp-srt-transmuxer
-    restart: unless-stopped
-    stdin_open: true
-    tty: true
-    ports:
-        - "1935:1935/tcp"
-        - "8484:80/tcp"
-  srt-relay:
-    platform: linux/amd64
-    build:
-        context: .
-        dockerfile: ./Dockerfile.srt-relay
-    image: ${REPOSITORY_NAME}/${PROJECT_NAME}-srt-relay:${GLOBAL_VERSION}
-    container_name: ${PROJECT_NAME}-srt-relay
-    restart: unless-stopped
-    stdin_open: true
-    tty: true
-    ports:
-        - "1935:1935/udp"
-  srtla-relay:
-    platform: linux/amd64
-    build:
-        context: .
-        dockerfile: ./Dockerfile.srtla-relay
-    image: ${REPOSITORY_NAME}/${PROJECT_NAME}-srtla-relay:${GLOBAL_VERSION}
-    container_name: ${PROJECT_NAME}-srtla-relay
-    restart: unless-stopped
-    stdin_open: true
-    tty: true
-    ports:
-      - "1936:1936/udp"
-      - "8181:8181/tcp"
+  #nginx-rtmp-srt-transmuxer:
+  #  platform: linux/amd64
+  #  build:
+  #      context: .
+  #      dockerfile: ./Dockerfile.nginx-rtmp-srt-transmuxer
+  #  image: ${REPOSITORY_NAME}/${PROJECT_NAME}-nginx-rtmp-srt-transmuxer:${GLOBAL_VERSION}
+  #  container_name: ${PROJECT_NAME}-nginx-rtmp-srt-transmuxer
+  #  restart: unless-stopped
+  #  stdin_open: true
+  #  tty: true
+  #  ports:
+  #      - "1935:1935/tcp"
+  #      - "8484:80/tcp"
+  #srt-relay:
+  #  platform: linux/amd64
+  #  build:
+  #      context: .
+  #      dockerfile: ./Dockerfile.srt-relay
+  #  image: ${REPOSITORY_NAME}/${PROJECT_NAME}-srt-relay:${GLOBAL_VERSION}
+  #  container_name: ${PROJECT_NAME}-srt-relay
+  #  restart: unless-stopped
+  #  stdin_open: true
+  #  tty: true
+  #  ports:
+  #      - "1935:1935/udp"
+  #srtla-relay:
+  #  platform: linux/amd64
+  #  build:
+  #      context: .
+  #      dockerfile: ./Dockerfile.srtla-relay
+  #  image: ${REPOSITORY_NAME}/${PROJECT_NAME}-srtla-relay:${GLOBAL_VERSION}
+  #  container_name: ${PROJECT_NAME}-srtla-relay
+  #  restart: unless-stopped
+  #  stdin_open: true
+  #  tty: true
+  #  ports:
+  #    - "1936:1936/udp"
+  #    - "8181:8181/tcp"
     #volumes:
     #  - "sls.conf:/etc/sls/sls.conf"
   belabox-srtla-receiver:

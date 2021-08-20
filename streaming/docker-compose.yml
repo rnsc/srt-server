@@ -1,7 +1,7 @@
 version: '3.8'
 services:
   noalbs-sls:
-    image: moothecow/noalbs-sls:1.0
+    image: ${REPOSITORY_NAME}/noalbs-sls:${GLOBAL_VERSION}
     container_name: noalbs-sls
     restart: unless-stopped
     stdin_open: true
@@ -12,7 +12,7 @@ services:
     depends_on:
       - "noalbs-srtla"
   noalbs-srtla:
-    image: moothecow/noalbs-srtla:1.0
+    image: ${REPOSITORY_NAME}/noalbs-srtla:${GLOBAL_VERSION}
     container_name: noalbs-srtla
     restart: unless-stopped
     stdin_open: true
@@ -23,7 +23,7 @@ services:
     volumes:
       - ./sls.conf:/etc/sls/sls.conf
   srtla-receiver:
-    image: moothecow/jetson-nano-belabox-srtla-receiver:1.0
+    image: ${REPOSITORY_NAME}/${PROJECT_NAME}-belabox-srtla-receiver:${GLOBAL_VERSION}
     container_name: srtla-receiver
     restart: unless-stopped
     ports:

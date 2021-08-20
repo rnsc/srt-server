@@ -1,6 +1,14 @@
 # Noalbs Hosting Setup for Belabox on the Jetson
 the streaming folder contains the docker compose for running the containers that are needed on the endpoint side (e.g. at home or cloud)
 
+## Updating
+just modify the `.env` file and increase the version number (see changelog)
+and rerun `docker compose up -d`
+
+##Changelog:
+1.1: applied critical patch from b3cks repo
+1.0: first docker release
+
 ## Pre-Requirements (windows)
 + OBS https://obsproject.com/download
 + Docker for Windows (it's important to check their requirements) https://docs.docker.com/docker-for-windows/install/

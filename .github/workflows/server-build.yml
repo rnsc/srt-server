@@ -1,10 +1,10 @@
-name: Docker images build - jetsonbuild
+name: Docker images build - linuxbuild
 
 on:
   push:
     branches: ['main']
     paths:
-      - 'jetsonbuild/**'
+      - 'linuxbuild/**'
   workflow_dispatch:
 
 jobs:
@@ -14,21 +14,21 @@ jobs:
       max-parallel: 1
       matrix:
         include:
-          - name: nginx-rtmp-srt-transmuxer 
-            dockerfile: jetsonbuild/Dockerfile.nginx-rtmp-srt-transmuxer
+          - name: belabox-srtla-receiver 
+            dockerfile: linuxbuild/Dockerfile.belabox-srtla-receiver
             tags: |-
-              rnsc/jetson-nano-nginx-rtmp-srt-transmuxer:latest
-              rnsc/jetson-nano-nginx-rtmp-srt-transmuxer:1.0.0
-          - name: multipath-udp-sender 
-            dockerfile: jetsonbuild/Dockerfile.multipath-udp-sender
+              rnsc/jetson-nano-belabox-srtla-receiver:latest
+              rnsc/jetson-nano-belabox-srtla-receiver:1.1.0
+          - name: noalbs-srtla
+            dockerfile: linuxbuild/Dockerfile.noalbs-srtla
             tags: |-
-              rnsc/jetson-nano-multipath-udp-sender:latest
-              rnsc/jetson-nano-multipath-udp-sender:1.0.0
-          - name: belabox
-            dockerfile: jetsonbuild/Dockerfile.belabox
+              rnsc/jetson-nano-noalbs-srtla:latest
+              rnsc/jetson-nano-noalbs-srtla:1.1.0
+          - name: noalbs-sls
+            dockerfile: linuxbuild/Dockerfile.noalbs-sls
             tags: |-
-              rnsc/jetson-nano-belabox:latest
-              rnsc/jetson-nano-belabox:1.0.0
+              rnsc/jetson-nano-noalbs-sls:latest
+              rnsc/jetson-nano-noalbs-sls:1.1.0
     steps:
       - name: Checkout
         uses: actions/checkout@v2

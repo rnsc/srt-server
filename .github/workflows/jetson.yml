@@ -9,6 +9,7 @@ jobs:
   docker:
     runs-on: ubuntu-latest
     strategy:
+      max-parallel: 1
       matrix:
         include:
           - name: nginx-rtmp-srt-transmuxer 

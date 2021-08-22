@@ -39,7 +39,7 @@ jobs:
       - name: Login to DockerHub
         uses: docker/login-action@v1 
         with:
-          username: jrei
+          username: rnsc
           password: ${{ secrets.DOCKER_HUB_TOKEN }}
 
       - name: Build and push ${{ matrix.name }}

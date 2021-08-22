@@ -1,6 +1,6 @@
 {
     "obs": {
-        "ip": "xxx.xxx.xxx.xxx.xxx:4444",
+        "ip": "xxx.xxx.xxx.xxx:4444",
         "password": "xxxxxxxxxx",
         "normalScene": "LIVE",
         "offlineScene": "BRB",
@@ -18,8 +18,8 @@
         "publisher": "publish/live/feed1"
     },
     "twitchChat": {
-        "channel": "m_o_o_",
-        "botUsername": "m_o_o_bot",
+        "channel": "<channel-name>",
+        "botUsername": "<bot-username>",
         "oauth": "oauth:xxxxxxxxxxxxxxx",
         "enable": false,
         "prefix": "!",
@@ -37,11 +37,7 @@
         ],
         "enableAutoSwitchNotification": true,
         "enableAutoStopStreamOnHostOrRaid": true,
-        "adminUsers": [
-            "kaarujp",
-            "kaarubot",
-            "M_o_o_"
-        ],
+        "adminUsers": [],
         "alias": [
             [
                 "r",

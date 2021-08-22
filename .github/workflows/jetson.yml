@@ -48,7 +48,7 @@ jobs:
       - name: Build and push ${{ matrix.name }}
         uses: docker/build-push-action@v2
         with:
-          context: ./linuxbuild/
+          context: ./jetsonbuild
           file: ${{ matrix.dockerfile }}
           platforms: "linux/amd64"
           push: true

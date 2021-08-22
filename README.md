@@ -17,6 +17,26 @@ docker compose up -d
 
 1.0: first docker release
 
+## Pre-Requirements (windows)
+
++ [OBS](https://obsproject.com/download)
++ Docker for Windows (it's important to check their requirements) <https://docs.docker.com/docker-for-windows/install/>
++ Router that can Port-Forward to your windows machine (also check windows firewall)
+
+## Installation (windows)
+
++ download <https://github.com/rnsc/streaming/archive/refs/heads/main.zip> extract to a folder that will be used permamently
++ go into the folder `streaming` in that extracted directory
++ modify the `config.json` (see documentation for details and below table <https://github.com/715209/nginx-obs-automatic-low-bitrate-switching#using-sls-srt-live-server> )
++ (optional) modify the `entrypoint.sh` file if you need to change the inbound port for the srtla stream (coming from jetson, don't forget to change the port in docker-compose.yml)
++ (optional) modify the `sls.conf` file if you wanna add more stream id's or change the name or do other things
++ make sure docker for windows is started and the containers are switched to "linux containers" (see <https://docs.docker.com/docker-for-windows/>)
++ open a Terminal (suggestion: <https://www.microsoft.com/store/productId/9N8G5RFZ9XK3> ) browse to that directory and type
+
+```shell
+docker-compose up -d
+```
+
 ## config.json explanation
 
 | Parameter   |     Note   |
@@ -29,26 +49,6 @@ docker compose up -d
 | twitchChat.botUsername | Username of the Twitch account you want to use for chat notifications and to accept commands |
 | twitchChat.oauth | you can get an oAuth token from <https://twitchapps.com/tmi/> |
 | twitchChat.adminUsers | list of Twitch chat users in your channel that are considered admins |
-
-## Pre-Requirements (windows)
-
-+ [OBS](https://obsproject.com/download)
-+ Docker for Windows (it's important to check their requirements) <https://docs.docker.com/docker-for-windows/install/>
-+ Router that can Port-Forward to your windows machine (also check windows firewall)
-
-## Installation (windows)
-
-+ download <https://github.com/rnsc/streaming/archive/refs/heads/main.zip> extract do a folder that will be used permamently
-+ go into the folder `streaming` in that extracted directory
-+ modify the `config.json` (see documentation for details <https://github.com/715209/nginx-obs-automatic-low-bitrate-switching#using-sls-srt-live-server> )
-+ (optional) modify the `entrypoint.sh` file if you need to change the inbound port for the srtla stream (coming from jetson)
-+ (optional) modify the `sls.conf` file if you wanna add more stream id's or change the name or do other things
-+ make sure docker for windows is started and the containers are switched to "linux containers" (see <https://docs.docker.com/docker-for-windows/>)
-+ open a Terminal (suggestion: <https://www.microsoft.com/store/productId/9N8G5RFZ9XK3> ) browse to that directory and type
-
-```shell
-docker-compose up -d
-```
 
 ## Troubleshooting
 

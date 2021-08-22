@@ -6,7 +6,7 @@ RUN git clone https://github.com/BELABOX/srt.git && cd srt && ./configure --pref
 WORKDIR /tmp
 RUN git clone https://github.com/BELABOX/srtla.git && cd srtla && make
 WORKDIR /tmp
-RUN git clone https://github.com/moo-the-cow/belaUI.git
+RUN git clone https://github.com/rnsc/belaUI.git
 
 FROM ubuntu:latest as ubuntubuild
 ENV DEBIAN_FRONTEND=noninteractive

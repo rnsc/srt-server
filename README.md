@@ -2,14 +2,6 @@
 
 The streaming folder contains the docker compose for running the containers that are needed on the endpoint side (e.g. at home or cloud).
 
-## Updating
-
-Just update the `.env` file and increase the version number (see changelog) and rerun.
-
-```shell
-docker compose up -d
-```
-
 ## Changelog
 
 1.1.0: updated version numbering for semver compliance
@@ -38,6 +30,20 @@ docker compose up -d
 
 ```shell
 docker-compose up -d
+```
+
+## Stopping the server
+
+```shell
+docker-compose down
+```
+
+## Updating
+
+Just update the `.env` file and increase the version number (see changelog) and rerun.
+
+```shell
+docker compose up -d
 ```
 
 ## config.json explanation

@@ -31,6 +31,7 @@ The streaming folder contains the docker compose for running the containers that
 ```shell
 docker-compose up -d
 ```
++ If you're hosting this on a home router, make sure to add a port forwarding rule for port 5000/UDP to your OBS/SRT computer, you need to set a DHCP reservation on your home router for your OBS/SRT computer so that it always gets the same address. As those settings vary a lot between different router manufacturers, it's hard to make a comprehensive a guide on this, but a quick Google search with your router brand and "port forward" or "dhcp static/reservation" should help you. In case you can't set a DHCP reservation for your computer, set it manually on your computer (and try to avoid setting it to an IP that could be served by the DHCP range of your routeur).
 
 ## Stopping the server
 

@@ -12,6 +12,8 @@ docker compose up -d
 
 ## Changelog
 
+1.1.0: updated version numbering for semver compliance
+
 1.1: applied critical patch from b3cks repo
 
 1.0: first docker release

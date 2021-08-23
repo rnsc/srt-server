@@ -20,7 +20,8 @@ docker compose up -d
 
 + [OBS](https://obsproject.com/download)
 + [OBS WebSocket plugin](https://github.com/Palakis/obs-websocket/releases) and configure it with a password (can be randomly generate and saved into the config.json)
-+ Docker for your OBS machine OS
++ Docker for your OBS machine OS: [macOS](https://docs.docker.com/desktop/mac/install/), [Windows](https://docs.docker.com/desktop/windows/install/), [Linux](https://docs.docker.com/engine/install/)
++ [Docker compose](https://docs.docker.com/compose/install/)
 + Router that can Port-Forward to your OBS/SRT receiver machine (also check local firewall of the machine)
 
 ## Installation

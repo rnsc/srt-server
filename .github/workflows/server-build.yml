@@ -22,13 +22,13 @@ jobs:
           - name: noalbs-srtla
             dockerfile: linuxbuild/Dockerfile.noalbs-srtla
             tags: |-
-              rnsc/jetson-nano-noalbs-srtla:latest
-              rnsc/jetson-nano-noalbs-srtla:1.1.0
+              rnsc/noalbs-srtla:latest
+              rnsc/noalbs-srtla:1.1.0
           - name: noalbs-sls
             dockerfile: linuxbuild/Dockerfile.noalbs-sls
             tags: |-
-              rnsc/jetson-nano-noalbs-sls:latest
-              rnsc/jetson-nano-noalbs-sls:1.1.0
+              rnsc/noalbs-sls:latest
+              rnsc/noalbs-sls:1.1.0
     steps:
       - name: Checkout
         uses: actions/checkout@v2

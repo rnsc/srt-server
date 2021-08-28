@@ -1,16 +1,10 @@
-# Noalbs Hosting Setup for Belabox on the Jetson
+# NOALBS/SRT Server Setup for Belabox (Jetson)
 
 The streaming folder contains the docker compose for running the containers that are needed on the endpoint side (e.g. at home or cloud).
 
-## Updating
-
-Just update the `.env` file and increase the version number (see changelog) and rerun.
-
-```shell
-docker compose up -d
-```
-
 ## Changelog
+
+1.1.0: updated version numbering for semver compliance
 
 1.1: applied critical patch from b3cks repo
 
@@ -20,7 +14,8 @@ docker compose up -d
 
 + [OBS](https://obsproject.com/download)
 + [OBS WebSocket plugin](https://github.com/Palakis/obs-websocket/releases) and configure it with a password (can be randomly generate and saved into the config.json)
-+ Docker for your OBS machine OS
++ Docker for your OBS machine OS: [macOS](https://docs.docker.com/desktop/mac/install/), [Windows](https://docs.docker.com/desktop/windows/install/), [Linux](https://docs.docker.com/engine/install/)
++ [Docker compose](https://docs.docker.com/compose/install/)
 + Router that can Port-Forward to your OBS/SRT receiver machine (also check local firewall of the machine)
 
 ## Installation
@@ -35,6 +30,21 @@ docker compose up -d
 
 ```shell
 docker-compose up -d
+```
++ If you're hosting this on a home router, make sure to add a port forwarding rule for port 5000/UDP to your OBS/SRT computer, you need to set a DHCP reservation on your home router for your OBS/SRT computer so that it always gets the same address. As those settings vary a lot between different router manufacturers, it's hard to make a comprehensive a guide on this, but a quick Google search with your router brand and "port forward" or "dhcp static/reservation" should help you. In case you can't set a DHCP reservation for your computer, set it manually on your computer (and try to avoid setting it to an IP that could be served by the DHCP range of your routeur).
+
+## Stopping the server
+
+```shell
+docker-compose down
+```
+
+## Updating
+
+Just update the `.env` file and increase the version number (see changelog) and rerun.
+
+```shell
+docker compose up -d
 ```
 
 ## config.json explanation

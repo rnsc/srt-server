@@ -50,6 +50,17 @@ docker-compose up -d
 | twitchChat.oauth | you can get an oAuth token from <https://twitchapps.com/tmi/> |
 | twitchChat.adminUsers | list of Twitch chat users in your channel that are considered admins |
 
+## OBS Confguration
+
+Make sure you have set up the scenes in OBS with the correct names (LIVE, BRB, LOW, REFRESH).
+Tweak the scenes to your taste.
+On the LIVE scene, add a media source with the following properties:
+
++ Uncheck local file
++ srt://localhost:30000/?streamid=PUBLISHER
++ Input format should be `mpegts`
++ Check the Seekable checkbox
+
 ## Troubleshooting
 
 + You can still access the normal srt server without bonding feature using udp port 30000 as a fallback (you'd need to add that to portforwarding though).
